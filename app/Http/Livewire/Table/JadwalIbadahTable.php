@@ -36,7 +36,6 @@ class JadwalIbadahTable extends LivewireDatatable
         }
         $data = [
             Column::name('tanggal')->label('tanggal')->searchable(),
-            Column::name('key')->label('key')->searchable(),
             Column::name('jadwal.jadwal_nama')->label('Jadwal')->searchable(),
             Column::callback('leader_id', function ($leader_id) {
                 return Petugas::find($leader_id)->petugas_nama;
@@ -55,6 +54,7 @@ class JadwalIbadahTable extends LivewireDatatable
             Column::callback('pembaca_doa_id', function ($pembaca_doa_id) {
                 return Petugas::find($pembaca_doa_id)->petugas_nama;
             })->label('Doa 3 komponen'),
+            Column::name('key')->label('key')->searchable(),
         ];
 
         if (!request()->segment(2)) {
