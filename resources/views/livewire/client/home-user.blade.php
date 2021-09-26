@@ -1,7 +1,7 @@
 <div class="page-inner">
     @push('user-styles')
     <style>
-        body {
+        .main-panel {
             background-image: url('{{asset('assets/img/bg.jpeg')}}');
             background-repeat: no-repeat;
             background-size: cover;
