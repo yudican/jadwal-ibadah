@@ -81,8 +81,11 @@ class Jadwal extends Component
     {
         $rule = [
             'jadwal_nama'  => 'required',
-            'jadwal_logo_path'  => 'required'
         ];
+
+        if ($this->jadwal_logo_path) {
+            $rule['jadwal_logo_path']  = 'required';
+        }
 
         return $this->validate($rule);
     }
