@@ -81,6 +81,17 @@
     .main-header.fixed[data-background-color="transparent"] .navbar-nav .nav-item .nav-link:focus {
       background: #fff !important;
     }
+
+    .footer {
+      border-top: 1px solid #eee;
+      padding: 15px;
+      background: #ffffff;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
   </style>
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
@@ -113,6 +124,37 @@
                       <img src="{{ Auth::user()->profile_photo_url }}" alt="..." class="avatar-img rounded-circle">
                     </div>
                   </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="scroll-wrapper dropdown-user-scroll scrollbar-outer" style="position: relative;">
+                      <div class="dropdown-user-scroll scrollbar-outer scroll-content"
+                        style="height: auto; margin-bottom: 0px; margin-right: 0px; max-height: 271px;">
+                        <li>
+                          <div class="user-box">
+                            <div class="avatar-lg"><img src="{{ Auth::user()->profile_photo_url }}" alt="image profile"
+                                class="avatar-img rounded"></div>
+                            <div class="u-text">
+                              <h4>{{Auth::user()->name}}</h4>
+                              <a href="{{route('dashboard')}}" class="btn btn-xs btn-secondary btn-sm">Dashboard</a>
+                            </div>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="scroll-element scroll-x" style="">
+                        <div class="scroll-element_outer">
+                          <div class="scroll-element_size"></div>
+                          <div class="scroll-element_track"></div>
+                          <div class="scroll-bar ui-draggable ui-draggable-handle" style="width: 100px;"></div>
+                        </div>
+                      </div>
+                      <div class="scroll-element scroll-y" style="">
+                        <div class="scroll-element_outer">
+                          <div class="scroll-element_size"></div>
+                          <div class="scroll-element_track"></div>
+                          <div class="scroll-bar ui-draggable ui-draggable-handle" style="height: 100px;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </ul>
                 </li>
                 @else
                 <li class="nav-item ">
@@ -130,10 +172,12 @@
     </div>
 
     <div class="main-panel">
-      <div class="container">{{$slot}}</div>
+      <div class="container">
+        {{$slot}}
+      </div>
     </div>
     <footer class="footer">
-      <div class="container">
+      <div class="container-fluid">
         <div class="copyright ml-auto">
           {{date('Y')}}, made with <i class="fa fa-heart heart text-danger"></i> by <a
             href="http://www.themekita.com">ThemeKita</a>

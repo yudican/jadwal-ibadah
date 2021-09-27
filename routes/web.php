@@ -9,6 +9,7 @@ use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Master\Jadwal;
 use App\Http\Livewire\Master\TempatIbadah;
 use App\Http\Livewire\Master\Petugas;
+use App\Http\Livewire\PanduanAdmin;
 use App\Http\Livewire\Settings\Menu;
 use App\Http\Livewire\UserManagement\Permission;
 use App\Http\Livewire\UserManagement\PermissionRole;
@@ -42,6 +43,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'user.authorization']
     Route::get('/role', Role::class)->name('role');
     Route::get('/user', User::class)->name('user');
     Route::get('/menu', Menu::class)->name('menu');
+
+    Route::get('/panduan-admin', PanduanAdmin::class)->name('panduan-admin');
 
     // App Route
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
