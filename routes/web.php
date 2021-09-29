@@ -10,6 +10,7 @@ use App\Http\Livewire\Master\Jadwal;
 use App\Http\Livewire\Master\TempatIbadah;
 use App\Http\Livewire\Master\Petugas;
 use App\Http\Livewire\PanduanAdmin;
+use App\Http\Livewire\PanduanUmum;
 use App\Http\Livewire\Settings\Menu;
 use App\Http\Livewire\UserManagement\Permission;
 use App\Http\Livewire\UserManagement\PermissionRole;
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeUser::class)->name('home');
 Route::get('/jadwal/{jadwal_id}', JadwalDetail::class)->name('jadwal.user');
-
+Route::get('/panduan-pengguna', PanduanUmum::class)->name('panduan-pengguna');
 
 Route::post('login', [AuthController::class, 'login'])->name('admin.login');
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'user.authorization']], function () {
