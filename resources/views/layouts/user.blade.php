@@ -176,14 +176,14 @@
         {{$slot}}
       </div>
     </div>
-    <footer class="footer">
+    {{-- <footer class="footer">
       <div class="container-fluid">
         <div class="copyright ml-auto">
           {{date('Y')}}, made with <i class="fa fa-heart heart text-danger"></i> by <a
-            href="http://www.themekita.com">ThemeKita</a>
-        </div>
-      </div>
-    </footer>
+      href="http://www.themekita.com">ThemeKita</a>
+  </div>
+  </div>
+  </footer> --}}
   </div>
 
 
