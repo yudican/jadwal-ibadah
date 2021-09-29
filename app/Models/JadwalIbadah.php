@@ -12,7 +12,7 @@ class JadwalIbadah extends Model
 
     public $table = 'jadwal_ibadah';
 
-    protected $fillable = ['tanggal', 'key', 'jadwal_id', 'leader_id', 'pembaca_kitab_id', 'pembaca_doa_id'];
+    protected $guarded = [];
 
     protected $dates = ['tanggal'];
 
@@ -24,6 +24,16 @@ class JadwalIbadah extends Model
     public function singers()
     {
         return $this->hasMany(JadwalIbadahSinger::class, 'jadwal_ibadah_id');
+    }
+
+    /**
+     * Get all of the singers for the JadwalIbadah
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tamborins()
+    {
+        return $this->hasMany(JadwalIbadahTamborin::class, 'jadwal_ibadah_id');
     }
 
     /**
@@ -64,5 +74,15 @@ class JadwalIbadah extends Model
     public function jadwal()
     {
         return $this->belongsTo(Jadwal::class);
+    }
+
+    /**
+     * Get the tempat that owns the JadwalIbadah
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function tempat()
+    {
+        return $this->belongsTo(TempatIbadah::class, 'tempat_ibadah_id');
     }
 }

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Admin;
+namespace App\Http\Livewire;
 
 use App\Models\Jadwal;
-use App\Models\JadwalIbadah as ModelsJadwalIbadah;
+use App\Models\JadwalIbadah;
 use App\Models\Petugas;
 use App\Models\TempatIbadah;
 use Livewire\Component;
 
-
-class JadwalIbadah extends Component
+class FormJadwal extends Component
 {
     public $tbl_jadwal_ibadah_id;
     public $tanggal;
@@ -28,18 +27,10 @@ class JadwalIbadah extends Component
     public $pembaca_doa = [];
     public $singers = [];
     public $tamborins = [];
-
-    public $form_active = false;
-    public $form = false;
-    public $update_mode = false;
-    public $modal = true;
-
-    protected $listeners = ['getDataById', 'getId'];
-
     public function render()
     {
-        return view('livewire.admin.tbl-jadwal-ibadah', [
-            'items' => ModelsJadwalIbadah::all(),
+        return view('livewire.form-jadwal', [
+            'items' => JadwalIbadah::all(),
             'leaders' => Petugas::all(),
             'jadwals' => Jadwal::all(),
             'tempats' => TempatIbadah::all(),
@@ -48,8 +39,9 @@ class JadwalIbadah extends Component
 
     public function selectJadwal($type = null, $jadwal = null)
     {
-        $this->singers = [];
-        $this->tamborins = [];
+        $this->emit('loadForm', ['singer' => count($this->singers), 'tamborin' => count($this->tamborins)]);
+        $this->singers = null;
+        $this->tamborins = null;
         $this->jadwal_id = $jadwal;
         $this->waktu_ibadah = null;
         $this->lagu = null;
@@ -61,8 +53,6 @@ class JadwalIbadah extends Component
         $this->tamborin_id = [];
         $this->pembaca_kitab = [];
         $this->pembaca_doa = [];
-
-        $this->emit('loadForm', ['singer' => $this->singers, 'tamborin' => $this->tamborins]);
     }
 
     public function handleSelect($type = 'leaders', $petugas_id = null)
@@ -126,11 +116,10 @@ class JadwalIbadah extends Component
             'jadwal_id'  => $this->jadwal_id,
             'leader_id'  => $this->leader_id,
             'pembaca_kitab_id'  => $this->pembaca_kitab_id,
-            'pembaca_doa_id'  => $this->pembaca_doa_id,
-            'tempat_ibadah_id'  => $this->tempat_ibadah_id,
+            'pembaca_doa_id'  => $this->pembaca_doa_id
         ];
 
-        $jadwal = ModelsJadwalIbadah::create($data);
+        $jadwal = JadwalIbadah::create($data);
 
         foreach ($this->penyanyi_id as $key => $value) {
             $jadwal->singers()->create(['penyanyi_id' => $value]);
@@ -155,10 +144,9 @@ class JadwalIbadah extends Component
             'leader_id'  => $this->leader_id,
             'jadwal_id'  => $this->jadwal_id,
             'pembaca_kitab_id'  => $this->pembaca_kitab_id,
-            'pembaca_doa_id'  => $this->pembaca_doa_id,
-            'tempat_ibadah_id'  => $this->tempat_ibadah_id,
+            'pembaca_doa_id'  => $this->pembaca_doa_id
         ];
-        $row = ModelsJadwalIbadah::find($this->tbl_jadwal_ibadah_id);
+        $row = JadwalIbadah::find($this->tbl_jadwal_ibadah_id);
 
 
         $row->update($data);
@@ -179,7 +167,7 @@ class JadwalIbadah extends Component
 
     public function delete()
     {
-        $row = ModelsJadwalIbadah::find($this->tbl_jadwal_ibadah_id);
+        $row = JadwalIbadah::find($this->tbl_jadwal_ibadah_id);
         $row->delete();
         $this->_reset();
         return $this->emit('showAlert', ['msg' => 'Data Berhasil Dihapus']);
@@ -196,63 +184,39 @@ class JadwalIbadah extends Component
 
     public function getDataById($tbl_jadwal_ibadah_id)
     {
-        $tbl_jadwal_ibadah = ModelsJadwalIbadah::find($tbl_jadwal_ibadah_id);
+        $tbl_jadwal_ibadah = JadwalIbadah::find($tbl_jadwal_ibadah_id);
+        $this->tbl_jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
         $this->tanggal = $tbl_jadwal_ibadah->tanggal;
         $this->key = $tbl_jadwal_ibadah->key;
+        $this->waktu_ibadah = $tbl_jadwal_ibadah->waktu_ibadah;
+        $this->lagu = $tbl_jadwal_ibadah->lagu;
+        $this->leader_id = $tbl_jadwal_ibadah->leader_id;
         $this->jadwal_id = $tbl_jadwal_ibadah->jadwal_id;
-        $this->jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
-        if ($tbl_jadwal_ibadah->jadwal_id == 1) {
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
-            $this->leader_id = $tbl_jadwal_ibadah->leader_id;
-            $this->singers = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_kitab_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_doa_id)->get();
+        $this->pembaca_kitab_id = $tbl_jadwal_ibadah->pembaca_kitab_id;
+        $this->pembaca_doa_id = $tbl_jadwal_ibadah->pembaca_doa_id;
 
-
-            $this->tamborins = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->whereNotIn('id', $this->penyanyi_id)->get();
-            $this->singers = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->whereNotIn('id', $this->penyanyi_id)->whereNotIn('id', $this->tamborin_id)->get();
-
-            $this->penyanyi_id = $tbl_jadwal_ibadah->singers()->pluck('penyanyi_id')->toArray();
-            $this->tamborin_id = $tbl_jadwal_ibadah->tamborins()->pluck('petugas_id')->toArray();
+        $this->pembaca_kitab = Petugas::where('id', '!=', $this->leader_id)->get();
+        $this->pembaca_doa = Petugas::where('id', '!=', $this->leader_id)->where('id', '!=', $this->pembaca_kitab_id)->get();
+        $this->singers = Petugas::where('id', '!=', $this->leader_id)->where('id', '!=', $this->pembaca_kitab_id)->where('id', '!=', $this->pembaca_doa_id)->get();
+        $this->penyanyi_id = $tbl_jadwal_ibadah->singers()->pluck('penyanyi_id')->toArray();
+        if ($this->form) {
+            $this->form_active = true;
+            $this->emit('loadForm');
         }
-        if ($tbl_jadwal_ibadah->jadwal_id == 2) {
-            $this->jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
-            $this->leader_id = $tbl_jadwal_ibadah->leader_id;
-            $this->pembaca_kitab_id = $tbl_jadwal_ibadah->pembaca_kitab_id;
-            $this->pembaca_doa_id = $tbl_jadwal_ibadah->pembaca_doa_id;
-
-
-            $this->pembaca_kitab = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->get();
-            $this->pembaca_doa = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_kitab_id)->get();
-            $this->singers = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_kitab_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_doa_id)->get();
-
-            $this->penyanyi_id = $tbl_jadwal_ibadah->singers()->pluck('penyanyi_id')->toArray();
+        if ($this->modal) {
+            $this->showModal();
         }
-        if ($tbl_jadwal_ibadah->jadwal_id == 3) {
-            $this->jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
-            $this->waktu_ibadah = $tbl_jadwal_ibadah->waktu_ibadah;
-            $this->lagu = $tbl_jadwal_ibadah->lagu;
-            $this->leader_id = $tbl_jadwal_ibadah->leader_id;
-        }
-        if ($tbl_jadwal_ibadah->jadwal_id == 4) {
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
-            $this->waktu_ibadah = $tbl_jadwal_ibadah->waktu_ibadah;
-        }
-
-        $this->form_active = true;
-        $this->emit('loadForm');
         $this->update_mode = true;
     }
 
     public function getId($tbl_jadwal_ibadah_id)
     {
-        $tbl_jadwal_ibadah = ModelsJadwalIbadah::find($tbl_jadwal_ibadah_id);
+        $tbl_jadwal_ibadah = JadwalIbadah::find($tbl_jadwal_ibadah_id);
         $this->tbl_jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
     }
 
     public function toggleForm($form)
     {
-        $this->_reset();
         $this->form_active = $form;
         $this->emit('loadForm');
     }
@@ -261,6 +225,10 @@ class JadwalIbadah extends Component
     {
         $this->emit('loadForm');
         $this->emit('showModal');
+    }
+    public function loadForm()
+    {
+        $this->emit('loadForm');
     }
 
     public function _reset()
