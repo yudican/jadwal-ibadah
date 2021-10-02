@@ -202,7 +202,7 @@ class JadwalIbadah extends Component
         $this->jadwal_id = $tbl_jadwal_ibadah->jadwal_id;
         $this->jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
         if ($tbl_jadwal_ibadah->jadwal_id == 1) {
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
+            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat_ibadah_id;
             $this->leader_id = $tbl_jadwal_ibadah->leader_id;
             $this->singers = Petugas::where('id', '!=', $tbl_jadwal_ibadah->leader_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_kitab_id)->where('id', '!=', $tbl_jadwal_ibadah->pembaca_doa_id)->get();
 
@@ -215,7 +215,7 @@ class JadwalIbadah extends Component
         }
         if ($tbl_jadwal_ibadah->jadwal_id == 2) {
             $this->jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
+            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat_ibadah_id;
             $this->leader_id = $tbl_jadwal_ibadah->leader_id;
             $this->pembaca_kitab_id = $tbl_jadwal_ibadah->pembaca_kitab_id;
             $this->pembaca_doa_id = $tbl_jadwal_ibadah->pembaca_doa_id;
@@ -229,13 +229,13 @@ class JadwalIbadah extends Component
         }
         if ($tbl_jadwal_ibadah->jadwal_id == 3) {
             $this->jadwal_ibadah_id = $tbl_jadwal_ibadah->id;
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
+            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat_ibadah_id;
             $this->waktu_ibadah = $tbl_jadwal_ibadah->waktu_ibadah;
             $this->lagu = $tbl_jadwal_ibadah->lagu;
             $this->leader_id = $tbl_jadwal_ibadah->leader_id;
         }
         if ($tbl_jadwal_ibadah->jadwal_id == 4) {
-            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat->id;
+            $this->tempat_ibadah_id = $tbl_jadwal_ibadah->tempat_ibadah_id;
             $this->waktu_ibadah = $tbl_jadwal_ibadah->waktu_ibadah;
         }
 
